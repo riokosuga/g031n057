@@ -33,7 +33,7 @@
 
   <body>
     <form name="form1" action="quiz.php" method="post" onsubmit="return check()">
-      <input type="text" name="answer" onblur="blank_alert()"/>
+      <input type="text" name="answer" />
       <input type="submit"/>
     </form>
   </body>
