@@ -9,12 +9,15 @@ $mysqli = new mysqli('localhost', $db_user, $db_pass, $db_name);
 $result_message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if (!empty($_POST['message'])) {
-    $mysqli->query("insert into `messages` (`body`) values ('{$_POST['message']}')");
+    $mysqli->query("insert into `messages` (`name`,'message') values ('{$_POST['name']},{$_POST['message']}')");
     $result_message = 'データベースに登録しました！XD';
   } else {
     $result_message = 'メッセージを入力してください...XO';
   }
 }
+
+//データベースからレコード取得
+//$result = $mysqli->query('select * from 'messages'');
 ?>
 
 <html>
@@ -24,8 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <body>
     <form action="" method="post">
-      <input type="text" name="message" />
+      名前：<input type="text" name="name" /><br/>
+      本文：<input type="text" name="message" />
       <input type="submit" />
     </form>
+    <?php foreach ($result as $row) : ?>
+      <p><?php echo $row['body']; ?></p>
+    <?php endforeach; ?>
   </body>
 </html>
