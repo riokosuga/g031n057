@@ -11,7 +11,7 @@ $result_message = '';
 //データベース操作
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   //メッセージの登録
-  if (!empty($_POST['message'] and !empty($_POST['name']))) {
+  if (!empty(htmlspecialchars($_POST['message']) and !empty(htmlspecialchars($_POST['name'])))) {
     $message = $mysqli->real_escape_string($_POST['message']);
     $mysqli->query("insert into `messages` (`name`,`body`) values ('{$_POST['name']}','{$_POST['message']}')");
     $result_message = 'データベースに登録しました！XD';
