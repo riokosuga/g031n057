@@ -20,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // insert文を実行
     $mysqli->query("insert into `messages` (`name`,`body`,`pass`) values ('{$name}','{$message}','{$password}')");
-    $result_message = 'データベースに登録しました！XD';
+    $result_message = 'データベースに登録しました！';
   } else {
-    $result_message = '名前，本文，パスワードを入力してください...XO';
+    $result_message = '名前，本文，パスワードを入力してください';
   }
 
   // メッセージの削除
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       }
     }
   }else{
-    $result_message = 'パスワードを入力してください';
+    //  $result_message = 'パスワードを入力してください';
   }
 
   // メッセージの削除
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       }
     }
   }else{
-    $result_message = '本文，パスワードを入力してください';
+    //$result_message = '本文，パスワードを入力してください';
   }
 }
 
