@@ -2,27 +2,35 @@
 $db_user = 'root';     // ユーザー名
 $db_pass = 'fxtrg25x'; // パスワード
 $db_name = 'bbs';     // データベース名
-
 // MySQLに接続
 $mysqli = new mysqli('localhost', $db_user, $db_pass, $db_name);
 $result = $mysqli->query('select * from `messages`');
 $result_message = '';
-
-//データベース操作
+// データベース操作
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  //メッセージの登録
-  if (!empty(htmlspecialchars($_POST['message']) and !empty(htmlspecialchars($_POST['name'])))) {
-    $message = $mysqli->real_escape_string($_POST['message']);
-    $mysqli->query("insert into `messages` (`name`,`body`) values ('{$_POST['name']}','{$_POST['message']}')");
+  // メッセージ登録
+  if (!empty($_POST['name']) and !empty($_POST['message']) and !empty($_POST['password'])) {
+    // XSS対策
+    $name = htmlspecialchars($_POST['name']);
+    $message = htmlspecialchars($_POST['message']);
+    $password = htmlspecialchars($_POST['password']);
+
+    $mysqli->query("insert into `messages` (`name`,`body`,`pass`) values ('{$name}','{$message}','{$password}')");
     $result_message = 'データベースに登録しました！XD';
   } else {
-    $result_message = '名前，メッセージを入力してください...XO';
+    $result_message = '名前，本文，パスワードを入力してください...XO';
   }
 
-  // メッセージの削除
-  if (!empty($_POST['del'])) {
+  // メッセージ削除
+  if(!empty($POST['del'])){
     $mysqli->query("delete from `messages` where `id` = {$_POST['del']}");
-    $result_message = 'メッセージを削除しました;)';
+    $result_message = 'メッセージを削除しました';
+  }
+
+  // メッセージ更新
+  if(!empty($_POST['upd'])){
+    $mysqli->query("update `messages` set `body` = {$_POST['upd_txt']} where `id` = {$_POST['upd']}");
+    $result_message = 'メッセージを更新しました';
   }
 }
 
@@ -37,11 +45,14 @@ $result = $mysqli->query('select * from `messages` order by `id` desc');
 
   <body>
     <h1>掲示板</h1>
-    <p><?php echo $result_message; ?></p>
+
+    <?php echo $result_message ?>
+
     <h2>書き込みフォーム</h2>
     <form action="" method="post">
-      名前：<input type="text" name="name" /><br/>
-      本文：<input type="text" name="message" />
+      名前　　　：<input type="text" name="name" /><br/>
+      本文　　　：<input type="text" name="message" /><br/>
+      パスワード：<input type="password" name="password" />
       <input type="submit" />
     </form>
 
@@ -52,22 +63,41 @@ $result = $mysqli->query('select * from `messages` order by `id` desc');
           <th>名前</th>
           <th>本文</th>
           <th>投稿時間</th>
-          <th>削除ボタン</th>
+          <th>削除</th>
+          <th>更新</th>
         </tr>
         <?php foreach ($result as $row) : ?>
         <tr>
-          <td width="5%" align="center"><?php echo htmlspecialchars($row['id']) ?></td>
-          <td width="10%" align="center"><?php echo htmlspecialchars($row['name']) ?></td>
-          <td width="70%"><?php echo htmlspecialchars($row['body']) ?></td>
-          <td width="10%"><?php echo htmlspecialchars($row['timestamp']) ?></td>
-          <td width="5%">
+          <td width="" align="center"><?php echo $row['id'] ?></td>
+          <td width="" align="center">
+            <?php
+              $name = htmlspecialchars($row['name']); // XSS対策
+              echo $name;
+            ?>
+          </td>
+          <td width="">
+            <?php
+              $body = htmlspecialchars($row['body']); // XSS対策
+              echo $body;
+            ?>
+          </td>
+          <td width=""><?php echo $row['timestamp'] ?></td>
+          <td width="">
             <form action="" method="post">
               <input type="hidden" name="del" value="<?php echo $row['id']; ?>" />
               <input type="submit" value="削除" />
             </form>
           </td>
+          <td>
+            <form action="" method="post">
+              <input type="hidden" name="upd" value="<?php echo $row['id']; ?>" />
+              <input type="text" name="upd_txt" />
+              <input type="submit" value="更新" />
+            </form>
+          </td>
         </tr>
         <?php endforeach; ?>
       </table>
+
   </body>
 </html>
