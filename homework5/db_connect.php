@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //  $result_message = 'パスワードを入力してください';
   }
 
-  // メッセージの削除
+  // メッセージの編集
   if(!empty($_POST['upd']) and !empty($_POST['upd_pass'])){
     // パスワードを取り出す
     $result = $mysqli->query("select `pass` from `messages` where `id` = {$_POST['upd']}");
