@@ -22,42 +22,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $mysqli->query("insert into `messages` (`name`,`body`,`pass`) values ('{$name}','{$message}','{$password}')");
     $result_message = 'データベースに登録しました！';
   } else {
-    $result_message = '名前，本文，パスワードを入力してください';
+    //$result_message = '名前，本文，パスワードを入力してください';
   }
 
   // メッセージの削除
   if (!empty($_POST['del']) and !empty($_POST['del_pass'])) {
-    // パスワードを取り出す
-    $result = $mysqli->query("select `pass` from `messages` where `id` = {$_POST['del']}");
-    foreach ($result as $row) {
-      // パスワード判定
-      if($row['pass'] === $_POST['del_pass']){
-        $mysqli->query("delete from `messages` where `id` = {$_POST['del']}");
-        $result_message = 'メッセージを削除しました';
-      }else{
-        $result_message = 'パスワードが違います';
-      }
+    $mysqli->query("delete from `messages` where `id` = {$_POST['del']} and `pass` = {$_POST['del_pass']}");
+    $count = $mysqli->affected_rows;
+    if($count == 1){
+      $reslut_message = 'メッセージを削除しました';
+    }else{
+      $result_message = 'パスワードが違います';
     }
-  }else{
-    //  $result_message = 'パスワードを入力してください';
   }
 
   // メッセージの編集
-  if(!empty($_POST['upd']) and !empty($_POST['upd_pass'])){
-    // パスワードを取り出す
-    $result = $mysqli->query("select `pass` from `messages` where `id` = {$_POST['upd']}");
-    foreach ($result as $row) {
-      // パスワード判定
-      if($row['pass'] === $_POST['upd_pass']){
-        $upd_txt = htmlspecialchars($_POST['upd_txt']); // XSS対策
-        $mysqli->query("update `messages` set body = ('{$upd_txt}') where `id` = {$_POST['upd']}");
-        $result_message = 'メッセージを編集しました';
-      }else{
-        $result_message = 'パスワードが違います';
-      }
+  if(!empty($_POST['upd']) and !empty($_POST['upd_txt']) and !empty($_POST['upd_pass'])){
+    $upd_txt = htmlspecialchars($_POST['upd_txt']);
+    $mysqli->query("update `messages` set `body` = ({$upd_txt}) where `id` = {$_POST['upd']} and `pass` = {$_POST['upd_pass']}");
+    $count = $mysqli->affected_rows;
+    if($count == 1){
+      $result_message = 'メッセージを編集しました';
+    }else{
+      $reslut_message = 'パスワードが違います';
     }
-  }else{
-    //$result_message = '本文，パスワードを入力してください';
   }
 }
 
