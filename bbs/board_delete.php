@@ -33,6 +33,19 @@
   <head>
     <meta charset="utf-8">
     <title>書き込み削除 - 掲示板</title>
+    <!-- フォーム入力がない場合のアラート -->
+    <script type="text/javascript">
+      <!--
+      function checkForm(){
+        if(document.form1.pass.value == ""){
+          alert("パスワードを入力して下さい");
+          return false;
+        }else{
+          return true;
+          }
+        }
+      // -->
+    </script>
   </head>
   <body>
     <h1>掲示板</h1>
@@ -42,10 +55,10 @@
 
     <h2>書き込み削除</h2>
     <!-- スレッド削除 -->
-    <form action="" method="post">
+    <form name="form1" action="" method="post">
       <input type="hidden" name="del" value="<?php echo $_POST['del'] ?>">
       パスワード：<input type="password" name="pass">
-      <input type="submit" value="削除" onclick="brank_check()">
+      <input type="submit" value="削除" onclick="checkForm();">
     </form>
 
     <!-- 該当の書き込み表示 -->

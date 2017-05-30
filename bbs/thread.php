@@ -32,6 +32,19 @@
   <head>
     <meta charset="utf-8">
     <title>掲示板</title>
+    <!-- フォーム入力がない場合のアラート -->
+    <script type="text/javascript">
+      <!--
+      function checkForm(){
+        if(document.form1.name.value == "" || document.form1.pass.value == ""){
+          alert("全ての項目を入力して下さい");
+          return false;
+         }else{
+           return true;
+          }
+        }
+      // -->
+    </script>
   </head>
   <body>
     <h1>掲示板</h1>
@@ -41,10 +54,10 @@
 
     <h2>スレッド作成</h2>
     <!-- 新規スレッド作成 -->
-    <form action="" method="post">
+    <form name="form1" action="" method="post">
       スレッド名：<input type="text" name="name"></td>
       パスワード：<input type="password" name="pass">
-      <input type="submit" value="作成" onclick="brank_check()">
+      <input type="submit" value="作成" onclick="checkForm();">
     </form>
 
     <!-- スレッド一覧表示 -->

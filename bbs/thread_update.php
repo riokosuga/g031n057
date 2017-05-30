@@ -38,6 +38,19 @@
   <head>
     <meta charset="utf-8">
     <title>スレッド編集 - 掲示板</title>
+    <!-- フォーム入力がない場合のアラート -->
+    <script type="text/javascript">
+      <!--
+      function checkForm(){
+        if(document.form1.name.value == "" || document.form1.pass.value == ""){
+          alert("全ての項目を入力して下さい");
+          return false;
+         }else{
+           return true;
+          }
+        }
+      // -->
+    </script>
   </head>
   <body>
     <h1>掲示板</h1>
@@ -47,11 +60,11 @@
 
     <h2>スレッド編集</h2>
     <!-- スレッド編集 -->
-    <form action="" method="post">
+    <form name="form1" action="" method="post">
       <input type="hidden" name="upd" value="<?php echo $_POST['upd'] ?>">
       スレッド名：<input type="text" name="name"><br>
       パスワード：<input type="password" name="pass">
-      <input type="submit" value="編集" onclick="brank_check()">
+      <input type="submit" value="編集" onclick="checkForm();">
     </form>
 
     <!-- 該当スレッド表示 -->

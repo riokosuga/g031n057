@@ -9,10 +9,6 @@
   $result = $mysqli->query('select * from `messages`');
   $result_message = '';
 
-  // スレッドID，スレッド名取得
-  //$th_name = $_POST['th_name'];
-  //$th_id = $_POST['th_id'];
-
   // データベース操作
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -38,6 +34,19 @@
   <head>
     <meta charset="utf-8">
     <title><?php echo $_POST['th_name'] ?></title>
+    <!-- フォーム入力がない場合のアラート -->
+    <script type="text/javascript">
+      <!--
+      function checkForm(){
+        if(document.form1.name.value == "" || document.form1.body.value == "" || document.form1.pass.value == ""){
+          alert("全ての項目を入力して下さい");
+          return false;
+         }else{
+           return true;
+          }
+        }
+      // -->
+    </script>
   </head>
   <body>
     <h1>掲示板</h1>
@@ -49,12 +58,12 @@
 
     <!-- 新規書き込みフォーム -->
     <h3>書き込みフォーム</h3>
-    <form action="" method="post">
+    <form name="form1" action="" method="post">
       <input type="hidden" name="th_id" value="<?php echo $_POST['th_id'] ?>">
       名前　　　：<input type="text" name="name"><br>
       本文　　　：<input type="text" name="body"><br>
       パスワード：<input type="password" name="pass">
-      <input type="submit" value="送信">
+      <input type="submit" value="送信" onclick="checkForm();">
     </form>
 
     <!-- 書き込み一覧表示 -->
