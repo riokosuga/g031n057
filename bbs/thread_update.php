@@ -6,7 +6,8 @@
 
   // MySQLに接続
   $mysqli = new mysqli('localhost', $db_user, $db_pass, $db_name);
-  $result = $mysqli->query('select * from `threads`');
+
+  // データベース操作時のメッセージ用
   $result_message = '';
 
   // データベース操作
@@ -14,10 +15,15 @@
 
     // スレッド名編集
     if(!empty($_POST['name']) and !empty($_POST['pass'])){
+      // XSS対策
+      $id = htmlspecialchars($_POST['upd']);
+      $name = htmlspecialchars($_POST['name']);
+      $pass = htmlspecialchars($_POST['pass']);
+
       // SQLインジェクション対策
-      $id = $mysqli->real_escape_string($_POST['upd']);
-      $name = $mysqli->real_escape_string($_POST['name']);
-      $pass = $mysqli->real_escape_string($_POST['pass']);
+      $mysqli->real_escape_string($id);
+      $mysqli->real_escape_string($name);
+      $mysqli->real_escape_string($pass);
 
       $mysqli->query("update `threads` set `name` = '{$name}' where `id` = '{$id}' and `password` = '{$pass}'");
       $count = $mysqli->affected_rows;

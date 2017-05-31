@@ -6,7 +6,8 @@
 
   // MySQLに接続
   $mysqli = new mysqli('localhost', $db_user, $db_pass, $db_name);
-  $result = $mysqli->query('select * from `threads`');
+
+  // データベース操作時のメッセージ用
   $result_message = '';
 
   // データベース操作
@@ -14,6 +15,12 @@
 
     // スレッド削除
     if(!empty($_POST['pass'])){
+      // XSS対策
+      $pass = htmlspecialchars($_POST['pass']);
+
+      // SQLインジェクション対策
+      $mysql->real_escape_string($pass);
+      
       $mysqli->query("delete from `threads` where `id` = '{$_POST['del']}' and `password` = '{$_POST['pass']}'");
       $count = $mysqli->affected_rows;
       if($count == 1){

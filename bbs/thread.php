@@ -6,7 +6,8 @@
 
   // MySQLに接続
   $mysqli = new mysqli('localhost', $db_user, $db_pass, $db_name);
-  $result = $mysqli->query('select * from `threads`');
+
+  // データベース操作時のメッセージ用
   $result_message = '';
 
   // データベース操作
@@ -14,9 +15,13 @@
 
     // スレッド作成
     if(!empty($_POST['name']) and !empty($_POST['pass'])){
+      // XSS対策
+      $name = htmlspecialchars($_POST['name']);
+      $pass = htmlspecialchars($_POST['pass']);
+
       // SQLインジェクション対策
-      $name = $mysqli->real_escape_string($_POST['name']);
-      $pass = $mysqli->real_escape_string($_POST['pass']);
+      $mysqli->real_escape_string($name);
+      $mysqli->real_escape_string($pass);
 
       $mysqli->query("insert into `threads` (`name`, `password`) values ('{$name}', '{$pass}')");
       $result_message = 'スレッドを作成しました!';
@@ -73,10 +78,14 @@
       <tr>
         <td align="center"><?php echo $row['id'] ?></td>
         <td>
+
           <form action="board.php" method="post">
             <input type="hidden" name="th_id" value="<?php echo $row['id'] ?>">
             <input type="hidden" name="th_name" value="<?php echo $row['name'] ?>">
-            <input type="submit" value="<?php echo $row['name']?>" >
+            <?php
+              $name = htmlspecialchars($row['name']); // XSS対策
+            ?>
+            <input type="submit" value="<?php echo $name?>" >
           </form>
         </td>
         <td><?php echo $row['timestamp'] ?></td>
