@@ -3,29 +3,23 @@
   $db_user = 'root';      // ユーザー名
   $db_pass = 'fxtrg25x';  // パスワード
   $db_name = 'bbs';       // データベース名
-
   // MySQLに接続
   $mysqli = new mysqli('localhost', $db_user, $db_pass, $db_name);
   $result = $mysqli->query('select * from `threads`');
   $result_message = '';
-
   // データベース操作
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
     // スレッド作成
     if(!empty($_POST['name']) and !empty($_POST['pass'])){
       // SQLインジェクション対策
       $name = $mysqli->real_escape_string($_POST['name']);
       $pass = $mysqli->real_escape_string($_POST['pass']);
-
       $mysqli->query("insert into `threads` (`name`, `password`) values ('{$name}', '{$pass}')");
       $result_message = 'スレッドを作成しました!';
     }
   }
-
     // データベースから降順でスレッドを取得
     $result = $mysqli->query("select * from `threads` order by `id` desc");
-
  ?>
 
 <html>
