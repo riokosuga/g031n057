@@ -33,7 +33,12 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title><?php echo $_POST['th_name'] ?></title>
+    <title>
+      <?php
+        $th_name = htmlspecialchars($_POST['th_name']);
+        echo $th_name;
+       ?>
+    </title>
     <!-- フォーム入力がない場合のアラート -->
     <script type="text/javascript">
       <!--
