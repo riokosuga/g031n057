@@ -59,7 +59,12 @@
     <!-- データベース操作時、コメント表示 -->
     <?php echo $result_message ?>
 
-    <h2><?php echo $_POST['th_name'] ?></h2>
+    <h2>
+      <?php
+        $th_name = htmlspecialchars($_POST['th_name']);
+        echo $th_name;
+       ?>
+    </h2>
 
     <!-- 新規書き込みフォーム -->
     <h3>書き込みフォーム</h3>
@@ -82,30 +87,27 @@
       </tr>
       <?php foreach($result as $row) : ?>
         <tr>
-          <td algin="center">
-            <?php
-              $name = htmlspecialchars($row['name']); // XSS対策
-              echo $name;
-            ?>
-          </td>
-          <td>
-            <?php
-              $body = htmlspecialchars($row['body']); // XSS対策
-              echo $body;
-            ?>
-          </td>
-          <td><?php echo $row['timestamp'] ?></td>
+          <?php
+            $name = htmlspecialchars($row['name']);           // XSS対策
+            $body = htmlspecialchars($row['body']);
+            $timestamp = htmlspecialchars($row['timestamp']);
+            $th_id = htmlspecialchars($_POST['th_id']);
+            $th_name = htmlspecialchars($_POST['th_name']);
+          ?>
+          <td align="center"><?php echo $name ?></td>
+          <td><?php echo $body; ?></td>
+          <td><?php echo $timestamp ?></td>
           <td>
             <form action="board_update.php" method="post">
-              <input type="hidden" name="th_id" value="<?php echo $_POST['th_id'] ?>">
-              <input type="hidden" name="th_name" value="<?php echo $_POST['th_name'] ?>">
-              <input type="hidden" name="upd" value="<?php echo $row['id'] ?>">
+              <input type="hidden" name="th_id" value="<?php echo $th_id ?>">
+              <input type="hidden" name="th_name" value="<?php echo $th_name ?>">
+              <input type="hidden" name="update" value="<?php echo $id ?>">
               <input type="submit" value="編集" >
             </form>
             <form action="board_delete.php" method="post">
-              <input type="hidden" name="th_id" value="<?php echo $_POST['th_id'] ?>">
-              <input type="hidden" name="th_name" value="<?php echo $_POST['th_name'] ?>">
-              <input type="hidden" name="del" value="<?php echo $row['id'] ?>">
+              <input type="hidden" name="th_id" value="<?php echo $th_id ?>">
+              <input type="hidden" name="th_name" value="<?php echo $th_name ?>">
+              <input type="hidden" name="del" value="<?php echo $id ?>">
               <input type="submit" value="削除" >
             </form>
           </td>

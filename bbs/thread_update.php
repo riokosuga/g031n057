@@ -16,14 +16,14 @@
     // スレッド名編集
     if(!empty($_POST['name']) and !empty($_POST['pass'])){
       // XSS対策
-      $id = htmlspecialchars($_POST['upd']);
-      $name = htmlspecialchars($_POST['name']);
-      $pass = htmlspecialchars($_POST['pass']);
+      //$id = htmlspecialchars($_POST['update']);
+      //$name = htmlspecialchars($_POST['name']);
+      //$pass = htmlspecialchars($_POST['pass']);
 
       // SQLインジェクション対策
-      $mysqli->real_escape_string($id);
-      $mysqli->real_escape_string($name);
-      $mysqli->real_escape_string($pass);
+      $id = $mysqli->real_escape_string($_POST['update']);
+      $name = $mysqli->real_escape_string($_POST['name']);
+      $pass = $mysqli->real_escape_string($_POST['pass']);
 
       $mysqli->query("update `threads` set `name` = '{$name}' where `id` = '{$id}' and `password` = '{$pass}'");
       $count = $mysqli->affected_rows;
@@ -36,7 +36,7 @@
   }
 
   // データベースから該当スレッドを取得
-  $result = $mysqli->query("select * from `threads` where `id` = {$_POST['upd']}");
+  $result = $mysqli->query("select * from `threads` where `id` = {$_POST['update']}");
 
 ?>
 
@@ -67,7 +67,7 @@
     <h2>スレッド編集</h2>
     <!-- スレッド編集 -->
     <form name="form1" action="" method="post">
-      <input type="hidden" name="upd" value="<?php echo $_POST['upd'] ?>">
+      <input type="hidden" name="update" value="<?php echo $_POST['update'] ?>">
       スレッド名：<input type="text" name="name"><br>
       パスワード：<input type="password" name="pass">
       <input type="submit" value="編集" onclick="checkForm();">
@@ -83,14 +83,14 @@
       </tr>
       <?php foreach($result as $row) : ?>
       <tr>
-        <td align="center"><?php echo $row['id'] ?></td>
-        <td>
-          <?php
-            $name = htmlspecialchars($row['name']);   // XSS対策
-            echo $name;
-           ?>
-        </td>
-        <td><?php echo $row['timestamp'] ?></td>
+        <?php
+          $id = htmlspecialchars($row['id']);           // XSS対策
+          $name = htmlspecialchars($row['name']);
+          $timestamp = htmlspecialchars($row['timestamp']);
+        ?>
+        <td align="center"><?php echo $id ?></td>
+        <td><?php echo $name; ?></td>
+        <td><?php echo $timestamp ?></td>
       </tr>
       <?php endforeach; ?>
     </table><br>

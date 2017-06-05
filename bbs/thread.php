@@ -11,22 +11,13 @@
   // データベース操作
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
     // スレッド作成
-    if(!empty($_POST['name']) and !empty($_POST['pass'])){
-      // XSS対策
-      $name = htmlspecialchars($_POST['name']);
-      $pass = htmlspecialchars($_POST['pass']);
-
-      // SQLインジェクション対策
-<<<<<<< HEAD
+    if (!empty($_POST['name']) && !empty($_POST['pass'])) {
+      //SQLインジェクション処理
       $name = $mysqli->real_escape_string($_POST['name']);
       $pass = $mysqli->real_escape_string($_POST['pass']);
-=======
-      $mysqli->real_escape_string($name);
-      $mysqli->real_escape_string($pass);
-
->>>>>>> origin/master
       $mysqli->query("insert into `threads` (`name`, `password`) values ('{$name}', '{$pass}')");
-      $result_message = 'スレッドを作成しました!';
+
+      $result_message = 'スレッドを作成しました！';
     }
   }
     // データベースから降順でスレッドを取得
@@ -76,26 +67,27 @@
       </tr>
       <?php foreach($result as $row) : ?>
       <tr>
-        <td align="center"><?php echo $row['id'] ?></td>
+        <?php
+          $id = htmlspecialchars($row['id']);           // XSS対策
+          $name = htmlspecialchars($row['name']);
+          $timestamp = htmlspecialchars($row['timestamp']);
+        ?>
+        <td align="center"><?php echo $id ?></td>
         <td>
-
           <form action="board.php" method="post">
-            <input type="hidden" name="th_id" value="<?php echo $row['id'] ?>">
-            <input type="hidden" name="th_name" value="<?php echo $row['name'] ?>">
-            <?php
-              $name = htmlspecialchars($row['name']); // XSS対策
-            ?>
+            <input type="hidden" name="th_id" value="<?php echo $id ?>">
+            <input type="hidden" name="th_name" value="<?php echo $name ?>">
             <input type="submit" value="<?php echo $name?>" >
           </form>
         </td>
-        <td><?php echo $row['timestamp'] ?></td>
+        <td><?php echo $timestamp ?></td>
         <td>
           <form action="thread_update.php" method="post">
-            <input type="hidden" name="upd" value="<?php echo $row['id'] ?>">
+            <input type="hidden" name="update" value="<?php echo $id ?>">
             <input type="submit" value="編集" >
           </form>
           <form action="thread_delete.php" method="post">
-            <input type="hidden" name="del" value="<?php echo $row['id'] ?>">
+            <input type="hidden" name="del" value="<?php echo $id ?>">
             <input type="submit" value="削除" >
           </form>
         </td>
