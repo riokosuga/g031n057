@@ -15,7 +15,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   // スレッド削除
   if(!empty($_POST['pass'])){
-    $mysqli->query("delete from `messages` where `id` = '{$_POST['del']}' and `pass` = '{$_POST['pass']}'");
+    //SQLインジェクション処理
+    $del = $mysqli->real_escape_string($_POST['del']);
+    $pass = $mysqli->real_escape_string($_POST['pass']);
+
+    $mysqli->query("delete from `messages` where `id` = '$del' and `pass` = '$pass'");
     $count = $mysqli->affected_rows;
     if($count == 1){
       header("Location: board_delete_comp.php");
