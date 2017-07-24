@@ -21,11 +21,16 @@ $result = $mysqli->query("select * from `user` order by `id` desc");
 </head>
 <body>
   <h1>YouTubeのプレイリストを作るよ！</h1>
-  <form action="result.php" name="" method="get">
+  <form action="" name="" method="get">
     再生時間　：<input type="number" name="time" min="5" max="120" step="1" value="5">分 (5~120分)<br>
     キーワード：<input type="text" name="keyword" /><br>
     <!-- ジャンル：<input type="" name="genre" /><br> -->
     <input type="submit" value="作成！" />
+  </form>
+
+  <h2>テスト-再生リストの作成</h2>
+  <form action="create_playlist.php" name="" method="">
+    <input type="submit" value="作成" />
   </form>
 
   <h2>ただの検索</h2>

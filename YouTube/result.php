@@ -43,7 +43,7 @@ require_once 'C:\xampp\htdocs\YouTube\Google\Service.php';
    * Google Developers Console <https://console.developers.google.com/>
    * Please ensure that you have enabled the YouTube Data API for your project.
    */
-  $DEVELOPER_KEY = '**';
+  $DEVELOPER_KEY = 'AIzaSyDDh99_VIpNj_ybIDO2rNPaW1xoJ6Ka5kA';
 
   $client = new Google_Client();
   $client->setDeveloperKey($DEVELOPER_KEY);

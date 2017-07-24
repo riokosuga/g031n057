@@ -16,8 +16,8 @@ session_start();
  * <https://developers.google.com/youtube/v3/guides/authentication>
  * Please ensure that you have enabled the YouTube Data API for your project.
  */
-$OAUTH2_CLIENT_ID = '**';
-$OAUTH2_CLIENT_SECRET = '**';
+$OAUTH2_CLIENT_ID = '1020596575942-gl6od90rmjn4cq8965v8bhqf4vjjq9sp.apps.googleusercontent.com';
+$OAUTH2_CLIENT_SECRET = 'YLyIDYpzK8x6TX4TwAbIHt1Z';
 
 $client = new Google_Client();
 $client->setClientId($OAUTH2_CLIENT_ID);
@@ -33,9 +33,9 @@ $client->setRedirectUri($redirect);
 $youtube = new Google_Service_YouTube($client);
 
 if (isset($_GET['code'])) {
-  if (strval($_SESSION['state']) !== strval($_GET['state'])) {
-    die('The session state did not match.');
-  }
+  // if (strval($_SESSION['state']) !== strval($_GET['state'])) {
+  //   die('The session state did not match.');
+  // }
 
   $client->authenticate($_GET['code']);
   $_SESSION['token'] = $client->getAccessToken();
@@ -48,14 +48,21 @@ if (isset($_SESSION['token'])) {
 
 // Check to ensure that the access token was successfully acquired.
 if ($client->getAccessToken()) {
+  if($client->isAccessTokenExpired()){
+    $authUrl = $client->createAuthUrl();
+    header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
+    exit();
+  }
   try {
     // This code creates a new, private playlist in the authorized user's
     // channel and adds a video to the playlist.
 
     // 1. Create the snippet for the playlist. Set its title and description.
     $playlistSnippet = new Google_Service_YouTube_PlaylistSnippet();
-    $playlistSnippet->setTitle('Test Playlist  ' . date("Y-m-d H:i:s"));
-    $playlistSnippet->setDescription('A private playlist created with the YouTube API v3');
+    // 日本時間に変更
+    date_default_timezone_set('Asia/Tokyo');
+    $playlistSnippet->setTitle(date("Y-m-d H:i:s") . 'に作成されたプレイリスト');
+    $playlistSnippet->setDescription('YouTube API v3 を利用して作成したプレイリストです');
 
     // 2. Define the playlist's status.
     $playlistStatus = new Google_Service_YouTube_PlaylistStatus();
@@ -76,7 +83,7 @@ if ($client->getAccessToken()) {
     // 5. Add a video to the playlist. First, define the resource being added
     // to the playlist by setting its video ID and kind.
     $resourceId = new Google_Service_YouTube_ResourceId();
-    $resourceId->setVideoId('SZj6rAYkYOg');
+    $resourceId->setVideoId('1bXuRZCyEyc');
     $resourceId->setKind('youtube#video');
 
     // Then define a snippet for the playlist item. Set the playlist item's
@@ -96,13 +103,13 @@ if ($client->getAccessToken()) {
     $playlistItemResponse = $youtube->playlistItems->insert(
         'snippet,contentDetails', $playlistItem, array());
 
-    $htmlBody .= "<h3>New Playlist</h3><ul>";
+    $htmlBody .= "<h3>作成したプレイリスト</h3><ul>";
     $htmlBody .= sprintf('<li>%s (%s)</li>',
         $playlistResponse['snippet']['title'],
         $playlistResponse['id']);
     $htmlBody .= '</ul>';
 
-    $htmlBody .= "<h3>New PlaylistItem</h3><ul>";
+    $htmlBody .= "<h3>プレイリストに追加した動画</h3><ul>";
     $htmlBody .= sprintf('<li>%s (%s)</li>',
         $playlistItemResponse['snippet']['title'],
         $playlistItemResponse['id']);
@@ -125,8 +132,8 @@ if ($client->getAccessToken()) {
 
   $authUrl = $client->createAuthUrl();
   $htmlBody = <<<END
-  <h3>Authorization Required</h3>
-  <p>You need to <a href="$authUrl">authorize access</a> before proceeding.<p>
+  <h3>認証が必要です</h3>
+  <p><a href="$authUrl">ココ</a>から認証してください。<p>
 END;
 }
 ?>
@@ -138,5 +145,8 @@ END;
 </head>
 <body>
   <?=$htmlBody?>
+  <form action="home.php" name="" method="">
+    <input type="submit" value="戻る" />
+  </form>
 </body>
 </html>
