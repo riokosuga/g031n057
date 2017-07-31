@@ -10,14 +10,14 @@ if ($_GET['q'] && $_GET['maxResults']) {
 
 // ライブラリまでのパスを指定して呼び出す
 // ローカル用
-require_once 'C:\xampp\htdocs\YouTube\Google\autoload.php';
-require_once 'C:\xampp\htdocs\YouTube\Google\Client.php';
-require_once 'C:\xampp\htdocs\YouTube\Google\Service.php';
+// require_once 'C:\xampp\htdocs\YouTube\Google\autoload.php';
+// require_once 'C:\xampp\htdocs\YouTube\Google\Client.php';
+// require_once 'C:\xampp\htdocs\YouTube\Google\Service.php';
 
 // サーバー用
-// require_once '/var/www/html/YouTube/Google/autoload.php';
-// require_once '/var/www/html/YouTube/Google/Client.php';
-// require_once '/var/www/html/YouTube/Google/Service.php';
+require_once '/var/www/html/YouTube/Google/autoload.php';
+require_once '/var/www/html/YouTube/Google/Client.php';
+require_once '/var/www/html/YouTube/Google/Service.php';
 
   // APIキー
   $DEVELOPER_KEY = '***';

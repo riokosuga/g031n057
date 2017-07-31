@@ -2,14 +2,14 @@
 
 // ライブラリまでのパスを指定して呼び出す
 // ローカル用
-require_once 'C:\xampp\htdocs\YouTube\Google\autoload.php';
-require_once 'C:\xampp\htdocs\YouTube\Google\Client.php';
-require_once 'C:\xampp\htdocs\YouTube\Google\Service.php';
+// require_once 'C:\xampp\htdocs\YouTube\Google\autoload.php';
+// require_once 'C:\xampp\htdocs\YouTube\Google\Client.php';
+// require_once 'C:\xampp\htdocs\YouTube\Google\Service.php';
 
 // サーバー用
-// require_once '/var/www/html/YouTube/Google/autoload.php';
-// require_once '/var/www/html/YouTube/Google/Client.php';
-// require_once '/var/www/html/YouTube/Google/Service.php';
+require_once '/var/www/html/YouTube/Google/autoload.php';
+require_once '/var/www/html/YouTube/Google/Client.php';
+require_once '/var/www/html/YouTube/Google/Service.php';
 
 // セッション開始
 session_start();
@@ -109,13 +109,15 @@ if ($client->getAccessToken()) {
 
     // 上で作成した再生リストをページに埋め込み表示
     $htmlBody = "";
+    $htmlBody .= sprintf('<div class="back4">');
     $htmlBody .= "<h3>作成したプレイリスト</h3>";
-    $htmlBody .= sprintf('<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=%s" frameborder="0" allowfullscreen></iframe>',
+    $htmlBody .= sprintf('<iframe width="840" height="473" src="https://www.youtube.com/embed/videoseries?list=%s" frameborder="0" allowfullscreen></iframe>',
       $playlistResponse['id']);
     $htmlBody .= "<br/>";
     $htmlBody .= sprintf('<a href="https://www.youtube.com/playlist?list=%s" target="_blank">%s</a>',
       $playlistResponse['id'],
       $playlistResponse['snippet']['title']);
+    $htmlBody .= "</div>";
 
   } catch (Google_Service_Exception $e) {
     $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
@@ -134,8 +136,10 @@ if ($client->getAccessToken()) {
 
   $authUrl = $client->createAuthUrl();
   $htmlBody = <<<END
+  <div class="back2">
   <h3>認証が必要です</h3>
   <p><a href="$authUrl">ココ</a>から認証してください。<p>
+  </div>
 END;
 }
 ?>
@@ -143,20 +147,32 @@ END;
 <!doctype html>
 <html>
 <head>
-<title>New Playlist</title>
+<title>作成完了</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="Flat-UI-master/dist/css/vendor/bootstrap.min.css" rel="stylesheet">
 <link href="Flat-UI-master/dist/css/flat-ui.min.css" rel="stylesheet">
 <link href="Flat-UI-master/docs/assets/css/demo.css" rel="stylesheet">
 <link rel="shortcut icon" href="Flat-UI-master/img/movie.ico">
+<link rel="stylesheet" href="style.css">
 
 </head>
 <body>
+  <h1>作成完了</h1>
   <?=$htmlBody?>
   <br/>
-  再生リストが上手く表示されない場合は再読み込みしてください。<br/>
-  再生リストを作成し直します。<input type="button" value="再読込" onclick="window.location.reload();" class="btn btn-inverse"/>
+  <div class="back3">
+    <h2 class="demo-section-title">お気に入り登録</h2>
+    <form action="favorite.php" method="POST">
+      <input type="submit" value="お気に入り登録" class="btn btn-warning" />
+      <?php
+      $name = htmlspecialchars($playlistResponse['snippet']['title']);
+      $videoId = htmlspecialchars($playlistResponse['id']);
+       ?>
+      <input type="hidden" name="name" value="<?php echo $name ?>" />
+      <input type="hidden" name="videoId"  value="<?php echo $videoId ?>" />
+    </form>
+  </div></br>
   <form action="home.php" name="" method="">
     <input type="submit" value="TOPへ戻る" class="btn btn-danger"/>
   </form>
