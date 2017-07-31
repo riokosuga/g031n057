@@ -12,87 +12,87 @@ $htmlBody = <<<END
 </form>
 END;
 
-// // This code will execute if the user entered a search query in the form
-// // and submitted the form. Otherwise, the page displays the form above.
-// if ($_GET['q'] && $_GET['maxResults']) {
-//   // Call set_include_path() as needed to point to your client library.
-//
-// require_once 'C:\xampp\htdocs\YouTube\Google\autoload.php';
-// require_once 'C:\xampp\htdocs\YouTube\Google\Client.php';
-// require_once 'C:\xampp\htdocs\YouTube\Google\Service.php';
-//
-//   /*
-//    * Set $DEVELOPER_KEY to the "API key" value from the "Access" tab of the
-//    * Google Developers Console <https://console.developers.google.com/>
-//    * Please ensure that you have enabled the YouTube Data API for your project.
-//    */
-//   $DEVELOPER_KEY = 'AIzaSyDDh99_VIpNj_ybIDO2rNPaW1xoJ6Ka5kA';
-//
-//   $client = new Google_Client();
-//   $client->setDeveloperKey($DEVELOPER_KEY);
-//
-//   // Define an object that will be used to make all API requests.
-//   $youtube = new Google_Service_YouTube($client);
-//
-//   try {
-//     // Call the search.list method to retrieve results matching the specified
-//     // query term.
-//     $searchResponse = $youtube->search->listSearch('id,snippet', array(
-//       'q' => $_GET['q'],
-//       'maxResults' => $_GET['maxResults'],
-//       'regionCode' => 'jp',
-//       // 'videoCategoryId' => '20',
-//       // 'order' => 'date'        // 更新日時順
-//       // 'order' => 'rating'      // 評価の高い順
-//       // 'order' => 'relevance'   // 関連性が高い順
-//       // 'order' => 'title'       // アルファベット順
-//       // 'order' => 'videoCount'  // アップロード動画の番号（降順）
-//       'order' => 'viewCount'      // 再生回数順
-//     ));
-//
-//     $videos = '';
-//     $channels = '';
-//     $playlists = '';
-//
-//     // Add each result to the appropriate list, and then display the lists of
-//     // matching videos, channels, and playlists.
-//     foreach ($searchResponse['items'] as $searchResult) {
-//       switch ($searchResult['id']['kind']) {
-//         case 'youtube#video':
-//           $videos .= sprintf('<div><img src="%s"></div><a href="http://www.youtube.com/watch?v=%s" target="_blank">%s</a>',
-//             $searchResult['snippet']['thumbnails']['default']['url'],
-//             $searchResult['id']['videoId'],
-//             $searchResult['snippet']['title']);
-//           break;
-//         case 'youtube#channel':
-//           $channels .= sprintf('<li>%s (%s)</li>',
-//               $searchResult['snippet']['title'], $searchResult['id']['channelId']);
-//           break;
-//         case 'youtube#playlist':
-//           $playlists .= sprintf('<div><img src="%s"></div><a href="https://www.youtube.com/playlist?list=%s" target="_blank">%s</a>',
-//             $searchResult['snippet']['thumbnails']['default']['url'],
-//             $searchResult['id']['playlistId'],
-//             $searchResult['snippet']['title']);
-//           break;
-//       }
-//     }
-//
-//     $htmlBody .= <<<END
-//     <h3>動画</h3>
-//     <ul>$videos</ul>
-//     <h3>チャンネル</h3>
-//     <ul>$channels</ul>
-//     <h3>プレイリスト</h3>
-//     <ul>$playlists</ul>
-// END;
-//   } catch (Google_Service_Exception $e) {
-//     $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
-//       htmlspecialchars($e->getMessage()));
-//   } catch (Google_Exception $e) {
-//     $htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
-//       htmlspecialchars($e->getMessage()));
-//   }
-// }
+// This code will execute if the user entered a search query in the form
+// and submitted the form. Otherwise, the page displays the form above.
+if ($_GET['q'] && $_GET['maxResults']) {
+  // Call set_include_path() as needed to point to your client library.
+
+require_once 'C:\xampp\htdocs\YouTube\Google\autoload.php';
+require_once 'C:\xampp\htdocs\YouTube\Google\Client.php';
+require_once 'C:\xampp\htdocs\YouTube\Google\Service.php';
+
+  /*
+   * Set $DEVELOPER_KEY to the "API key" value from the "Access" tab of the
+   * Google Developers Console <https://console.developers.google.com/>
+   * Please ensure that you have enabled the YouTube Data API for your project.
+   */
+  $DEVELOPER_KEY = 'AIzaSyDDh99_VIpNj_ybIDO2rNPaW1xoJ6Ka5kA';
+
+  $client = new Google_Client();
+  $client->setDeveloperKey($DEVELOPER_KEY);
+
+  // Define an object that will be used to make all API requests.
+  $youtube = new Google_Service_YouTube($client);
+
+  try {
+    // Call the search.list method to retrieve results matching the specified
+    // query term.
+    $searchResponse = $youtube->search->listSearch('id,snippet', array(
+      'q' => $_GET['q'],
+      'maxResults' => $_GET['maxResults'],
+      'regionCode' => 'jp',
+      // 'videoCategoryId' => '20',
+      // 'order' => 'date'        // 更新日時順
+      // 'order' => 'rating'      // 評価の高い順
+      // 'order' => 'relevance'   // 関連性が高い順
+      // 'order' => 'title'       // アルファベット順
+      // 'order' => 'videoCount'  // アップロード動画の番号（降順）
+      'order' => 'viewCount'      // 再生回数順
+    ));
+
+    $videos = '';
+    $channels = '';
+    $playlists = '';
+
+    // Add each result to the appropriate list, and then display the lists of
+    // matching videos, channels, and playlists.
+    foreach ($searchResponse['items'] as $searchResult) {
+      switch ($searchResult['id']['kind']) {
+        case 'youtube#video':
+          $videos .= sprintf('<div><img src="%s"></div><a href="http://www.youtube.com/watch?v=%s" target="_blank">%s</a>',
+            $searchResult['snippet']['thumbnails']['default']['url'],
+            $searchResult['id']['videoId'],
+            $searchResult['snippet']['title']);
+          break;
+        case 'youtube#channel':
+          $channels .= sprintf('<li>%s (%s)</li>',
+              $searchResult['snippet']['title'], $searchResult['id']['channelId']);
+          break;
+        case 'youtube#playlist':
+          $playlists .= sprintf('<div><img src="%s"></div><a href="https://www.youtube.com/playlist?list=%s" target="_blank">%s</a>',
+            $searchResult['snippet']['thumbnails']['default']['url'],
+            $searchResult['id']['playlistId'],
+            $searchResult['snippet']['title']);
+          break;
+      }
+    }
+
+    $htmlBody .= <<<END
+    <h3>動画</h3>
+    <ul>$videos</ul>
+    <h3>チャンネル</h3>
+    <ul>$channels</ul>
+    <h3>プレイリスト</h3>
+    <ul>$playlists</ul>
+END;
+  } catch (Google_Service_Exception $e) {
+    $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
+      htmlspecialchars($e->getMessage()));
+  } catch (Google_Exception $e) {
+    $htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
+      htmlspecialchars($e->getMessage()));
+  }
+}
 ?>
 
 <!doctype html>

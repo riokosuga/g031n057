@@ -1,0 +1,31 @@
+.back1{
+  color: #FFFFFF;
+  background-color: #FA5858;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.back2{
+  color: #FFFFFF;
+  background-color: #82FA58;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.back3{
+  color: #FFFFFF;
+  background-color: #58D3F7;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.back4{
+  color: #FFFFFF;
+  background-color: #D8D8D8;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+body{
+  background-image: url(back.jpg);
+}
